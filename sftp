@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Ustawienia
+remote_host="adres_serwera"
+remote_user="użytkownik"
+remote_password="hasło"
+remote_dir="/ścieżka/do/katalogu/na/serwerze"
+local_dir="/ścieżka/do/lokalnego/katalogu"
+
+# Pobierz listę plików z dzisiaj
+files_today=$(find $local_dir -type f -daystart -mtime -1)
+
+# Iteruj przez każdy plik i przesyłaj go
+for file in $files_today; do
+    filename=$(basename "$file")
+    echo "Przesyłanie $filename..."
+    # SFTP przesyłanie pliku
+    expect -c "
+        spawn sftp $remote_user@$remote_host
+        expect \"password:\"
+        send \"$remote_password\r\"
+        expect \"sftp>\"
+        send \"put $file $remote_dir/$filename\r\"
+        expect \"sftp>\"
+        send \"bye\r\"
+        expect eof
+    "
+    # Usuwanie lokalnego pliku po przesłaniu
+    rm "$file"
+    echo "Plik $filename został przesłany i usunięty lokalnie."
+done
