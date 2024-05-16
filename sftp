@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Katalog lokalny, gdzie znajdują się pliki do pakowania
+# Katalog lokalny, gdzie znajdują się pliki do kompresji
 LOCAL_DIR="/sciezka/do/katalogu"
 
 # Katalog na zdalnym serwerze, gdzie będą przesyłane pliki
@@ -25,14 +25,16 @@ for FILE in $LOCAL_DIR/*; do
         # Nazwa pliku bez ścieżki
         FILENAME=$(basename "$FILE")
         
-        # Pakowanie pliku
-        tar -czf "$LOCAL_DIR/$FILENAME.tar.gz" "$FILE"
+        # Kompresja pliku
+        gzip -c "$FILE" > "$FILE.gz"
         
-        # Wysyłka spakowanego pliku przez SFTP
-        echo "put $LOCAL_DIR/$FILENAME.tar.gz $REMOTE_DIR/$FILENAME.tar.gz" | sftp -oBatchMode=no -b-
-        
-        # Usuwanie spakowanego pliku lokalnego po wysłaniu
-        rm "$LOCAL_DIR/$FILENAME.tar.gz"
+        # Wysyłka skompresowanego pliku przez SFTP
+        echo "put $FILE.gz $REMOTE_DIR/$FILENAME.gz" | sftp -oBatchMode=no -b- "$SFTP_USER@$SERVER" << EOF
+$SFTP_PASSWORD
+EOF
+
+        # Usuwanie skompresowanego pliku lokalnego po wysłaniu
+        rm "$FILE.gz"
         
         echo "Plik $FILENAME został pomyślnie wysłany i usunięty."
     fi
