@@ -1,0 +1,10 @@
+# Ustawienie katalogu, gdzie będą przechowywane pliki log
+LOG_DIR="/tmptest"
+
+# Pętla tworząca 10 plików log
+for ((i=1; i<=10; i++)); do
+    # Generowanie losowych danych o rozmiarze 2MB i zapisanie ich do pliku log
+    dd if=/dev/urandom of="$LOG_DIR/log$i.log" bs=1M count=2
+    
+    echo "Utworzono plik log$i.log"
+done
