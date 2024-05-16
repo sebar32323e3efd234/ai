@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Katalog lokalny, gdzie znajdują się pliki do kompresji
+LOCAL_DIR="/sciezka/do/katalogu"
+
+# Katalog na zdalnym serwerze, gdzie będą przesyłane pliki
+REMOTE_DIR="/sciezka/do/katalogu/na/serwerze"
+
+# Adres serwera
+SERVER="nazwa_serwera"
+
+# Pobranie daty dzisiejszej w formacie YYYY-MM-DD
+TODAY=$(date +"%Y-%m-%d")
+
+# Pętla po plikach w katalogu lokalnym
+for FILE in $LOCAL_DIR/*; do
+    # Sprawdzenie, czy plik jest plikiem i czy jego data modyfikacji jest dzisiaj
+    if [ -f "$FILE" ] && [ "$(date -r "$FILE" +"%Y-%m-%d")" == "$TODAY" ]; then
+        # Nazwa pliku bez ścieżki
+        FILENAME=$(basename "$FILE")
+        
+        # Wysyłka skompresowanego pliku przez SCP
+        scp "$FILE" "$SERVER:$REMOTE_DIR/$FILENAME"
+        
+        # Sprawdzenie, czy transmisja się powiodła
+        if [ $? -eq 0 ]; then
+            echo "Plik $FILENAME został pomyślnie wysłany."
+            
+            # Usuwanie pliku lokalnego po udanej transmisji
+            rm "$FILE"
+            
+            echo "Plik $FILENAME został pomyślnie usunięty."
+        else
+            echo "Błąd podczas wysyłania pliku $FILENAME."
+        fi
+    fi
+done
