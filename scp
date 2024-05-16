@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Katalog lokalny, gdzie znajdują się pliki do kompresji
+LOCAL_DIR="/sciezka/do/katalogu"
+
+# Katalog na zdalnym serwerze, gdzie będą przesyłane pliki
+REMOTE_DIR="/sciezka/do/katalogu/na/serwerze"
+
+# Adres serwera
+SERVER="nazwa_serwera"
+
+# Nazwa użytkownika SCP
+SCP_USER="nazwa_uzytkownika"
+
+# Hasło użytkownika SCP (lepiej przekazać przez zmienną środowiskową lub bezpieczniejsze metody)
+SCP_PASSWORD="haslo"
+
+# Pobranie daty dzisiejszej w formacie YYYY-MM-DD
+TODAY=$(date +"%Y-%m-%d")
+
+# Pętla po plikach w katalogu lokalnym
+for FILE in $LOCAL_DIR/*; do
+    # Sprawdzenie, czy plik jest plikiem i czy jego data modyfikacji jest dzisiaj
+    if [ -f "$FILE" ] && [ "$(date -r "$FILE" +"%Y-%m-%d")" == "$TODAY" ]; then
+        # Nazwa pliku bez ścieżki
+        FILENAME=$(basename "$FILE")
+        
+        # Wysyłka skompresowanego pliku przez SCP
+        scp -oBatchMode=no -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -P PORT "$FILE" "$SCP_USER@$SERVER:$REMOTE_DIR/$FILENAME" << EOF
+$SCP_PASSWORD
+EOF
+
+        # Usuwanie pliku lokalnego po wysłaniu
+        rm "$FILE"
+        
+        echo "Plik $FILENAME został pomyślnie wysłany i usunięty."
+    fi
+done
