@@ -1,0 +1,1 @@
+java -Dquarkus.config.locations=/path/to/your/config/application.properties -jar target/quarkus-app/quarkus-run.jar
