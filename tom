@@ -1,0 +1,3 @@
+Dodaj poniższą linię w sekcji konfiguracyjnej, najlepiej na początku pliku, zaraz po liniach komentarza (#!/bin/sh):
+
+export CATALINA_OPTS="$CATALINA_OPTS -Dorg.apache.catalina.STRICT_SERVLET_COMPLIANCE=false"
