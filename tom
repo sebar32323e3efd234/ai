@@ -3,3 +3,9 @@ Dodaj poniższą linię w sekcji konfiguracyjnej, najlepiej na początku pliku, 
 export CATALINA_OPTS="$CATALINA_OPTS -Dorg.apache.catalina.STRICT_SERVLET_COMPLIANCE=false"
 export CATALINA_OPTS="$CATALINA_OPTS -Dorg.apache.catalina.connector.RECYCLE_FACADES=false"
 
+
+
+Offloading SSL do reverse proxy (np. Nginx, HAProxy)
+
+    Przeniesienie obsługi SSL do innego serwera pozwala Tomcatowi obsługiwać tylko ruch HTTP, co zmniejsza obciążenie CPU.
+    Tomcat działa wtedy jako backend, a Nginx obsługuje SSL i terminowanie TLS.
