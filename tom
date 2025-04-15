@@ -9,3 +9,10 @@ Offloading SSL do reverse proxy (np. Nginx, HAProxy)
 
     Przeniesienie obsługi SSL do innego serwera pozwala Tomcatowi obsługiwać tylko ruch HTTP, co zmniejsza obciążenie CPU.
     Tomcat działa wtedy jako backend, a Nginx obsługuje SSL i terminowanie TLS.
+
+
+
+<Valve className="org.apache.catalina.valves.RemoteIpValve"
+       remoteIpHeader="x-forwarded-for"
+       proxiesHeader="x-forwarded-by"
+       protocolHeader="x-forwarded-proto" />
