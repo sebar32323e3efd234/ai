@@ -4,3 +4,16 @@
            keystoreFile="${catalina.base}/conf/keystore.jks"
            keystorePass="changeit"
            clientAuth="false" sslProtocol="TLS" />
+
+
+
+
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>SecureApp</web-resource-name>
+        <url-pattern>/*</url-pattern> <!-- lub tylko wybrane np. /admin/* -->
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
