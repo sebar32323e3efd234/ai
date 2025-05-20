@@ -1,0 +1,9 @@
+image: registry.gitlab.com/mojprojekt/obraz:latest
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - echo "Działa z prywatnym obrazem"
