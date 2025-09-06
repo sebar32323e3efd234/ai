@@ -1,0 +1,13 @@
+<tomcat-users>
+  <!-- Role wymagane przez aplikacje admina -->
+  <role rolename="manager-gui"/>
+  <role rolename="manager-script"/>
+  <role rolename="manager-status"/>
+  <role rolename="manager-jmx"/>
+  <role rolename="admin-gui"/>
+  <role rolename="admin-script"/>
+
+  <!-- Użytkownik z hasłem -->
+  <user username="admin" password="TwojeHaslo123" 
+        roles="manager-gui,manager-status,manager-script,manager-jmx,admin-gui,admin-script"/>
+</tomcat-users>
