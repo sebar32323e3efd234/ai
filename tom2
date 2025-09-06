@@ -11,3 +11,35 @@
   <user username="admin" password="TwojeHaslo123" 
         roles="manager-gui,manager-status,manager-script,manager-jmx,admin-gui,admin-script"/>
 </tomcat-users>
+
+
+
+
+<Server port="8005" shutdown="SHUTDOWN">
+  <GlobalNamingResources>
+    <!-- Tutaj Tomcat mówi: mamy bazę użytkowników w pliku tomcat-users.xml -->
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <!-- To właśnie mówi Tomcatowi: używaj UserDatabase (czyli tomcat-users.xml) -->
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+      </Host>
+    </Engine>
+  </Service>
+</Server>
